@@ -155,8 +155,8 @@ class Blockchain {
 
 }
 
+/*
 var bc = new Blockchain();
-
 async function test() {
 
   // Adding a block before init will fail. Genesis block comes first!
