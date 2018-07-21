@@ -14,7 +14,7 @@ class Database {
   isEmpty() {
     return new Promise( (resolve, reject) => {
       let empty = true;
-      this.db.createReadStream(db, {
+      this.db.createReadStream({
         keys: true,
         values: false,
         limit: 1
