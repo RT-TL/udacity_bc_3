@@ -38,7 +38,7 @@ class Database {
   async getLength() {
     return new Promise( (resolve, reject) => {
       let length = 0;
-      this.db.createReadStream(db, {
+      this.db.createReadStream({
         keys: true,
         values: false
       }).on('data', function () {

@@ -7,7 +7,7 @@ then provide database functions in seperate file
 const SHA256 = require('crypto-js/sha256');
 const db = require('./database');
 
-class Block{
+class Block {
   constructor(data){
     this.hash = "",
     this.height = 0,
@@ -154,7 +154,10 @@ class Blockchain {
   }
 
 }
-
+module.exports = {
+  Block, Blockchain
+};
+//module.exports = Blockchain;
 /*
 var bc = new Blockchain();
 async function test() {
@@ -178,4 +181,4 @@ async function test() {
   bc.validateBlock(7);
 }
 
-test();
+test();*/
