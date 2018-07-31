@@ -7,13 +7,13 @@ then provide database functions in seperate file
 const SHA256 = require('crypto-js/sha256');
 const db = require('./database');
 
-class Block {
+class Block{
   constructor(data){
     this.hash = "",
-    this.height = 0,
-    this.body = data,
-    this.time = 0,
-    this.previousBlockHash = ""
+      this.height = 0,
+      this.body = data,
+      this.time = 0,
+      this.previousBlockHash = ""
   }
 }
 
@@ -22,7 +22,7 @@ class Block {
  * The creation process is asynchronous, ensuring that the first block
  * is the gensis block.
  *
- * To connect the blockchain to the database, call init() first, otherwise
+ * To connect the blockchain_old to the database, call init() first, otherwise
  * interacting with the chain will not be possible.
  *
  */
@@ -31,13 +31,13 @@ class Blockchain {
   }
 
   /**
-   * Initializes the blockchain generating the genesis block if needed.
-   * Without calling init() the blockchain will not be connected to a database.
+   * Initializes the blockchain_old generating the genesis block if needed.
+   * Without calling init() the blockchain_old will not be connected to a database.
    *
    * @returns {Promise<void>}
    */
   async init () {
-    this.chain = await new db('./blockchain');
+    this.chain = await new db('./blockchain_old');
     const empty = await this.chain.isEmpty();
     if (empty) {
       console.log('generating genesis block');
@@ -113,16 +113,23 @@ class Blockchain {
    */
   async validateChain(){
     let errorLog = [];
-    for (var i = 0; i < await this.getBlockHeight(); i++) {
+
+    const height = await this.getBlockHeight();
+    for (var i = 0; i < height; i++) {
       // validate block
-      if (!await this.validateBlock(i))errorLog.push(i);
-      // compare blocks hash link
-      let blockHash = (await this.getBlock(i)).hash;
-      let previousHash = (await this.getBlock(i+1)).previousBlockHash;
-      if (blockHash!==previousHash) {
-        errorLog.push(i);
+      console.log('Validating: ', i);
+      if (!await this.validateBlock(i)) errorLog.push(i);
+
+      // Do not validate previous hash for last block on the chain
+      if (i < (height - 1)) {
+        let blockHash = (await this.getBlock(i)).hash;
+        let previousHash = (await this.getBlock(i + 1)).previousBlockHash;
+        if (blockHash !== previousHash) {
+          errorLog.push(i);
+        }
       }
     }
+
     if (errorLog.length>0) {
       console.log('Block errors = ' + errorLog.length);
       console.log('Blocks: '+errorLog);
@@ -154,6 +161,7 @@ class Blockchain {
   }
 
 }
+
 module.exports = {
   Block, Blockchain
 };

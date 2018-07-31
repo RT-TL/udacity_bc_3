@@ -2,7 +2,11 @@
 
 ## Initializing
 
-The project uses yarn. Run npm `npm install`or `yarn install`to get dependencies up and running. A node environment is required.
+The project uses yarn. Run npm `npm install`or `yarn install` to get dependencies up and running. A node environment is required.
+
+## Dependencies
+
+- Express Framework
 
 ## Using the web API
 
